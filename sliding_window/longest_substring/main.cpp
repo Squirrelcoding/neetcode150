@@ -6,40 +6,34 @@ class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
       if (s.size() <= 1) return s.size();
-      int p1 = 0;
-      int p2 = 1;
-      int res = 1;
-
-      while (p2 < s.size()) {
-        if (s[p1] == s[p2]) {
-          p1++;
-          p2++;
-          continue;
+      int max_length = 1;
+      int l = 0;
+      int r = 0;
+      set<char> characters;
+      characters.insert(s[l]);
+      while (r < s.size()) {
+        r++;
+        while (characters.count(s[r])) {
+          max_length = max(max_length, r - l);
+          characters.erase(s[l]);
+          l++;
         }
-        map<char, int> chars;
-        chars.insert({s[p1], p1});
-        chars.insert({s[p2], p2});
-        while (true) {
-          p2++;
-          if (p2 == s.size() || chars.count(s[p2])) {
-            res = max(res, p2 - p1);
-            p1 = p2;
-            p2 = p1 + 1;
-            break;
-          } else {
-            chars.insert({s[p2], p2});
-          }
-        }
+        characters.insert(s[r]);
+        max_length = max(max_length, r - l);
       }
-
-      return res;        
+      return max_length;
     }
 };
 
 
 int main() {
   Solution s;
-  cout << s.lengthOfLongestSubstring("au") << endl;
+  cout << s.lengthOfLongestSubstring("abcabcbb") << " " << 3 << endl;
+  cout << s.lengthOfLongestSubstring("bbbbb") << " " << 1 << endl;
+  cout << s.lengthOfLongestSubstring("pwwkew") << " " << 3 << endl;
+  cout << s.lengthOfLongestSubstring("au") << " "  << 2 << endl;
+  cout << s.lengthOfLongestSubstring("zxyzxyz") << " "  <<  3 <<endl;
+  cout << s.lengthOfLongestSubstring("xxxx") << " "  << 1 << endl;
 
   return 0;
 }
